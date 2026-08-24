@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <time.h>
+#include <math.h>
 
 #include "../slstatus.h"
 #include "../util.h"
@@ -16,14 +18,23 @@ gid(const char *unused)
 const char *
 username(const char *unused)
 {
-	struct passwd *pw;
+	time_t now = time(NULL);          
+	struct tm *t = localtime(&now);
 
-	if (!(pw = getpwuid(geteuid()))) {
-		warn("getpwuid '%d':", geteuid());
-		return NULL;
+	const int curSec = ((t->tm_hour * 60) + t->tm_min ) * 60;
+	const int dayPerc = (curSec * 100) / 86400;
+
+	char panel[1024];
+	char bar[] = "..........";
+	int loaded = round(dayPerc/10);
+
+	for ( int i = 0; i < loaded; i++ ) {
+		bar[i] = ':';
 	}
 
-	return bprintf("%s", pw->pw_name);
+	sprintf(panel, "%s %d%%", bar, dayPerc);
+
+	return bprintf("%s", panel);
 }
 
 const char *

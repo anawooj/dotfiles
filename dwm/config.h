@@ -2,20 +2,20 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 1.5;        /* border pixel of windows */
+static const unsigned int borderpx  = 1.5;      /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 /*defaults= 20, 10, 10, 30 */
-static const unsigned int gappih    = 9;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 9;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 9;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 9;       /* vert outer gap between windows and screen edge */
+static const unsigned int gappih    = 9;        /* horiz inner gap between windows */
+static const unsigned int gappiv    = 9;        /* vert inner gap between windows */
+static const unsigned int gappoh    = 9;        /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 9;        /* vert outer gap between windows and screen edge */
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[] = {
-    "JetBrainsMono Nerd Font Mono:style=Bold:pixelsize=14",
-};
-static const char dmenufont[]       = "JetBrainsMono Nerd Font Mono:style=Bold:pixelsize=12";
+
+static const char *fonts[]          = { "Roboto Mono Nerd Font:size=9", "fontawesome:size=11" };
+static const char dmenufont[]       = "Roboto Mono Nerd Font:size=9";
+
 static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -41,8 +41,7 @@ static const char *colors[][3] = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "󰙯" };
-// static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { " ", " ", " 󰙯", "4", "5", "6", "7", "8" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -51,31 +50,26 @@ static const Rule rules[] = {
 	 */
 	/* class            instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",            NULL,       NULL,       0,            1,           -1 },
-    { "Google-chrome",   NULL,       NULL,       1 << 1,       0,           -1 },
-    { "Brave-browser",   NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "firefox",         NULL,       NULL,       1 << 2,       0,           -1 },
-	{ "Slack",           NULL,       NULL,       1 << 3,       0,           -1 },
-	{ "discord",         NULL,       NULL,       1 << 4,       0,           -1 },
-	{ "kdenlive",        NULL,       NULL,       1 << 7,       0,           -1 },
+	{ "librewolf",       NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "webcord",         NULL,       NULL,       1 << 2,       0,           -1 },
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const float mfact     = 0.55; 	 /* factor of master area size [0.05..0.95] */
+static const int nmaster     = 1;    	 /* number of clients in master area */
+static const int resizehints = 1;      	 /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1; 	 /* 1 will force focus on the fullscreen window */
 
-#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#define FORCE_VSPLIT 1   		 /* nrowgrid layout: force two clients to always split vertically */
 #include "vanitygaps.c"
-/*#include "fibonacci.c"*/
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "󰝘",        tile },    /* first entry is default */
-	{ "",        NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
- 	{ "",        spiral },
- 	{ "[\\]",     dwindle },
+	{ " 󰝘 ",        tile },    	/* first entry is default */
+	{ "  ",        NULL },    	/* no layout function means floating behavior */
+	{ " [M] ",      monocle },
+ 	{ "  ",        spiral },
+ 	{ " [\\] ",     dwindle },
 };
 
 /* key definitions */
@@ -93,22 +87,27 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_gray2, "-sb", col_mag, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *firefoxcmd[]  = { "firefox-bin", NULL };
-static const char *slock[]    = { "slock", NULL };
-static const char *screenshotcmd[] = { "/bin/sh", "-c", "maim -s | xclip -selection clipboard -t image/png", NULL };
-static const char *rofi[]  = { "rofi", "-show", "drun", "-theme", "~/.config/rofi/config.rasi", NULL };
-static const char *emacsclient[]  = { "emacsclient", "-c", "-a", "", NULL };
+static const char *screenshotcmd[] = { "escrotum", "-s",  NULL };
 static const char *brighter[] = { "brightnessctl", "set", "10%+", NULL };
 static const char *dimmer[]   = { "brightnessctl", "set", "10%-", NULL };
+static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%",   NULL };
+static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%",   NULL };
+static const char *mute_vol[] = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
 
 static Keychord *keychords[] = {
     /* key count, modifier/key sequence,            function,        argument */
 
     &((Keychord){1, {{MODKEY, XK_r}},               spawn,          {.v = dmenucmd } }),
     &((Keychord){1, {{MODKEY, XK_space}},           spawn,          {.v = termcmd } }),
-    &((Keychord){1, {{MODKEY, XK_l}},               spawn,          {.v = slock } }),
-    &((Keychord){1, {{ControlMask, XK_Print}},      spawn,          {.v = screenshotcmd } }),
-    &((Keychord){1, {{MODKEY, XK_d}},               spawn,          {.v = rofi } }),
+    &((Keychord){1, {{MODKEY, XK_Print}},           spawn,          {.v = screenshotcmd } }),
+
+    &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},spawn,	    {.v = dimmer } }),
+    &((Keychord){1, {{0, XF86XK_MonBrightnessUp}},  spawn, 	    {.v = brighter } }),
+
+    // it's not working because there is something wrong with pipewire. will fix later
+    &((Keychord){1, {{0, XF86XK_AudioMute}},        spawn,          {.v = mute_vol } }),
+    &((Keychord){1, {{0, XF86XK_AudioLowerVolume}}, spawn,          {.v = down_vol } }),
+    &((Keychord){1, {{0, XF86XK_AudioRaiseVolume}}, spawn,          {.v = up_vol } }),
 
     &((Keychord){1, {{MODKEY, XK_b}},               togglebar,      {0} }),
     &((Keychord){1, {{MODKEY, XK_j}},               focusstack,     {.i = +1 } }),
@@ -127,8 +126,7 @@ static Keychord *keychords[] = {
     &((Keychord){1, {{MODKEY, XK_q}},               killclient,     {0} }),
 
     &((Keychord){1, {{MODKEY|ShiftMask, XK_t}},     setlayout,      {.v = &layouts[0]} }),
-    // &((Keychord){1, {{MODKEY, XK_f}},               setlayout,      {.v = &layouts[1]} }),
-    &((Keychord){1, {{MODKEY, XK_m}},               setlayout,      {.v = &layouts[2]} }),
+    &((Keychord){1, {{MODKEY, XK_n}},               setlayout,      {.v = &layouts[2]} }),
     &((Keychord){1, {{MODKEY, XK_c}},               setlayout,      {.v = &layouts[3]} }),
     &((Keychord){1, {{MODKEY, XK_o}},               setlayout,      {.v = &layouts[4]} }),
     &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},setlayout,      {0} }),
@@ -143,28 +141,6 @@ static Keychord *keychords[] = {
     &((Keychord){1, {{MODKEY, XK_period}},          focusmon,       {.i = +1 } }),
     &((Keychord){1, {{MODKEY|ShiftMask, XK_comma}}, tagmon,         {.i = -1 } }),
     &((Keychord){1, {{MODKEY|ShiftMask, XK_period}},tagmon,         {.i = +1 } }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_f}}, spawn, {.v = (const char*[]){"firefox", NULL}} }),
-
-    // Keychords for navigating to tags (small hands/emacs pinky)
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_1}}, view, {.ui = 1 << 0} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_2}}, view, {.ui = 1 << 1} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_3}}, view, {.ui = 1 << 2} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_4}}, view, {.ui = 1 << 3} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_5}}, view, {.ui = 1 << 4} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_6}}, view, {.ui = 1 << 5} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_7}}, view, {.ui = 1 << 6} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_8}}, view, {.ui = 1 << 7} }),
-    &((Keychord){2, {{MODKEY, XK_space}, {0, XK_9}}, view, {.ui = 1 << 8} }),
-
-    // Dmenu Scripts
-    &((Keychord){2, {{MODKEY, XK_f}, {0, XK_f}}, spawn, SHCMD("$HOME/repos/dmenu-scripts/repos-dmenu.sh")}),
-    &((Keychord){2, {{MODKEY, XK_f}, {0, XK_o}}, spawn, SHCMD("$HOME/repos/dmenu-scripts/tmux-dmenu.sh")}),
-    &((Keychord){2, {{MODKEY, XK_f}, {0, XK_b}}, spawn, SHCMD("$HOME/repos/dmenu-scripts/bookmarks-dmenu.sh")}),
-    
-    // Emacs Scripts
-    // &((Keychord){2, {{MODKEY, XK_e}, {0, XK_t}}, spawn, SHCMD("$HOME/scripts/tmux-dmenu.sh")}),
-    // &((Keychord){2, {{MODKEY, XK_e}, {0, XK_a}}, spawn, SHCMD("$HOME/scripts/tmux-dmenu.sh")}),
-    // &((Keychord){2, {{MODKEY, XK_e}, {0, XK_t}}, spawn, SHCMD("$HOME/scripts/tmux-dmenu.sh")}),
 
     // TAGKEYS
     TAGKEYS(                        XK_1,                      0)
@@ -179,9 +155,6 @@ static Keychord *keychords[] = {
 
     &((Keychord){1, {{MODKEY|ShiftMask,   XK_q}},   quit,           {0} }),
     &((Keychord){1, {{MODKEY|ControlMask, XK_r}},   quit,           {1} }),
-
-    &((Keychord){1, {{0, XF86XK_AudioRaiseVolume}}, spawn, {.v = (const char*[]){"pactl", "set-sink-volume", "@DEFAULT_SINK@", "+3%", NULL} } }),
-    &((Keychord){1, {{0, XF86XK_AudioLowerVolume}}, spawn, {.v = (const char*[]){"pactl", "set-sink-volume", "@DEFAULT_SINK@", "-3%", NULL} } }),
 };
 
 

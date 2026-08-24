@@ -1,9 +1,9 @@
-static char *font = "Liberation Mono:pixelsize=16:antialias=true:autohint=true";
+static char *font = "Roboto Mono Nerd Font:pixelsize=13:antialias=true:autohint=true";
 static int borderpx = 2;
 
 static float alpha = 0.5;
 
-static char *shell = "/bin/sh";
+static char *shell = "/bin/zsh";
 char *utmp = NULL;
 
 char *scroll = NULL;
