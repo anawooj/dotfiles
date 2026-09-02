@@ -1,0 +1,6 @@
+alias s="shutdown 0"
+alias c="cd"
+alias l="ls -la"
+alias x="clear"
+alias mk="sudo make clean install"
+alias neofetch="fastfetch"

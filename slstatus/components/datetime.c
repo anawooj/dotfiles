@@ -88,7 +88,7 @@ datetime(const char *fmt)
 
 	char result[1024];
 
-	snprintf(result, sizeof result, "%s, %d%s of %s %dE%s | %s:%s", dayOfMonthNames[date1->dayOfMonthNum], date1->dayNum, date1->suffix, monthNames[date1->monthNum - 1], date1->era, date1->year, date1->hour, date1->minute);
+	snprintf(result, sizeof result, "%s, %d%s of %s %dE%s   %s:%s", dayOfMonthNames[date1->dayOfMonthNum], date1->dayNum, date1->suffix, monthNames[date1->monthNum - 1], date1->era, date1->year, date1->hour, date1->minute);
 
 	memset(buf, 0, sizeof buf);
 	

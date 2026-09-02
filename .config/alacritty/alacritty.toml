@@ -1,0 +1,10 @@
+[general]
+import = [
+    "~/.config/alacritty/themes/tokyo_night.toml"
+]
+
+[font]
+size = 9.0
+
+[window]
+opacity = 0.8

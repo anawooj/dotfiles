@@ -2,7 +2,7 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 1.5;      /* border pixel of windows */
+static const unsigned int borderpx  = 2;      /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 /*defaults= 20, 10, 10, 30 */
 static const unsigned int gappih    = 9;        /* horiz inner gap between windows */
@@ -13,8 +13,8 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 
-static const char *fonts[]          = { "Roboto Mono Nerd Font:size=9", "fontawesome:size=11" };
-static const char dmenufont[]       = "Roboto Mono Nerd Font:size=9";
+static const char *fonts[]          = { "JetBrainsMonoNerdFont-Light:size=9", "fontawesome:size=9" };
+static const char dmenufont[]       = "JetBrainsMonoNerdFont-Light:size=9";
 
 static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#444444";
@@ -86,12 +86,12 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_gray2, "-sb", col_mag, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", NULL };
 static const char *screenshotcmd[] = { "escrotum", "-s",  NULL };
 static const char *brighter[] = { "brightnessctl", "set", "10%+", NULL };
 static const char *dimmer[]   = { "brightnessctl", "set", "10%-", NULL };
-static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%",   NULL };
-static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%",   NULL };
+static const char *up_vol[]   = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+2%",   NULL };
+static const char *down_vol[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-2%",   NULL };
 static const char *mute_vol[] = { "pactl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
 
 static Keychord *keychords[] = {
@@ -104,7 +104,6 @@ static Keychord *keychords[] = {
     &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},spawn,	    {.v = dimmer } }),
     &((Keychord){1, {{0, XF86XK_MonBrightnessUp}},  spawn, 	    {.v = brighter } }),
 
-    // it's not working because there is something wrong with pipewire. will fix later
     &((Keychord){1, {{0, XF86XK_AudioMute}},        spawn,          {.v = mute_vol } }),
     &((Keychord){1, {{0, XF86XK_AudioLowerVolume}}, spawn,          {.v = down_vol } }),
     &((Keychord){1, {{0, XF86XK_AudioRaiseVolume}}, spawn,          {.v = up_vol } }),

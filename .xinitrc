@@ -1,4 +1,5 @@
-feh --bg-center --fullscreen 'storage/IMG_20231109_063033.jpg' &
+feh --bg-center --randomize 'storage/wallpapers/go study' &
 slstatus &
 setxkbmap -layout pl &
+picom &
 exec dwm
